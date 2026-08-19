@@ -47,6 +47,7 @@ public static class DiseaseDestroyerBuild
         if (miniMap)
         {
             miniMap.rect = new Rect(.8f, .7f, .16f, .28f);
+            miniMap.orthographicSize = 550f;
             miniMap.cullingMask &= ~(1 << 8);
             miniMap.clearFlags = CameraClearFlags.SolidColor;
             miniMap.backgroundColor = new Color(.06f, .06f, .07f, 1f);
