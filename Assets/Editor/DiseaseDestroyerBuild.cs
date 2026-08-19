@@ -52,8 +52,12 @@ public static class DiseaseDestroyerBuild
             miniMap.clearFlags = CameraClearFlags.SolidColor;
             miniMap.backgroundColor = new Color(.06f, .06f, .07f, 1f);
         }
-        var obsoleteMapBorder = GameObject.Find("MapBorder");
-        if (obsoleteMapBorder) obsoleteMapBorder.SetActive(false);
+        var mapBorder = scene.GetRootGameObjects()
+            .SelectMany(root => root.GetComponentsInChildren<Transform>(true))
+            .FirstOrDefault(item => item.name == "MapBorder");
+        if (mapBorder)
+            foreach (var mapBackground in mapBorder.GetComponentsInChildren<Renderer>(true))
+                mapBackground.enabled = false;
         var missing = 0;
         foreach (var root in scene.GetRootGameObjects())
             foreach (var transform in root.GetComponentsInChildren<Transform>(true))
