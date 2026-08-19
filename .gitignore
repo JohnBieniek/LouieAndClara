@@ -47,7 +47,7 @@ local.properties
 *_i.c
 *_p.c
 *.ilk
-*.meta
+# Unity .meta files are required to preserve asset and component references.
 *.obj
 *.pch
 *.pdb
@@ -161,3 +161,17 @@ pip-log.txt
 
 # Mac crap
 .DS_Store
+
+# Unity generated files
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+*.csproj
+*.sln
+*.slnx
+*.pidb
+*.userprefs
+*.log
+.vsconfig
