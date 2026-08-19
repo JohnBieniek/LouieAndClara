@@ -24,16 +24,11 @@ public class playerMovement : MonoBehaviour
                 HUDHandler.PlaySfx(shoot);
                 var spawn=GameObject.Find("BulletSpawn").transform;
                 curBullet=Instantiate(bullet,spawn.position,Quaternion.identity);
-                var direction=(spawn.position-transform.position).normalized;
-                var bulletCollider=curBullet.GetComponentInChildren<Collider>();
-                var playerExtents=playerCollider.bounds.extents;
-                var bulletExtents=bulletCollider.bounds.extents;
-                var playerRadius=Mathf.Abs(direction.x)*playerExtents.x+Mathf.Abs(direction.y)*playerExtents.y;
-                var bulletRadius=Mathf.Abs(direction.x)*bulletExtents.x+Mathf.Abs(direction.y)*bulletExtents.y;
-                var muzzleDistance=Vector3.Dot(spawn.position-playerCollider.bounds.center,direction);
-                var clearDistance=Mathf.Max(muzzleDistance,playerRadius+bulletRadius+.5f);
-                curBullet.position=playerCollider.bounds.center+direction*clearDistance;
-                curBullet.linearVelocity=direction*bulletSpeed;
+                var bulletColliders=curBullet.GetComponentsInChildren<Collider>();
+                foreach(var bulletCollider in bulletColliders)
+                    Physics.IgnoreCollision(playerCollider,bulletCollider,true);
+                StartCoroutine(RestoreBulletCollision(bulletColliders));
+                curBullet.linearVelocity=(spawn.position-transform.position).normalized*bulletSpeed;
             }
             else curBullet.GetComponent<bulletControl>().kill();
         }
@@ -48,6 +43,7 @@ public class playerMovement : MonoBehaviour
         body.linearVelocity*=body.linearVelocity.magnitude>=450?.95f*speedSlowFactor:.99f*speedSlowFactor;ResolveOverlaps();EndSlow();
     }
     void ResolveOverlaps(){if(!playerCollider)return;foreach(var other in Physics.OverlapSphere(body.position,50f,~0,QueryTriggerInteraction.Ignore)){if(other==playerCollider||other.attachedRigidbody==body||(!other.CompareTag("Respawn")&&!other.CompareTag("Finish")))continue;if(Physics.ComputePenetration(playerCollider,playerCollider.transform.position,playerCollider.transform.rotation,other,other.transform.position,other.transform.rotation,out var direction,out var distance))body.position+=direction*(distance+.1f);}var p=body.position;p.z=0;body.position=p;}
+    IEnumerator RestoreBulletCollision(Collider[] bulletColliders){yield return new WaitForSeconds(1.5f);foreach(var bulletCollider in bulletColliders)if(bulletCollider)Physics.IgnoreCollision(playerCollider,bulletCollider,false);}
     public void addVel(Vector3 v)=>body.linearVelocity=new Vector3(v.x,v.y,0);
     public void startSlow(){if(!slow){slow=true;slowTime=Time.time;speedSlowFactor=1;accelSlowFactor=3;}}
     void EndSlow(){if(slow&&Time.time>slowTime+slowDuration){slow=false;slowTime=0;speedSlowFactor=1;accelSlowFactor=0;}}
