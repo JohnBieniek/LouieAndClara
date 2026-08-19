@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class HUDHandler : MonoBehaviour
 {
-    static AudioSource sfx;
+    static AudioSource sfx; static Material effectMaterial;
     public float maxX=480,minX=-480,maxY=480,minY=-480,numVirusStart=20,numCellsStart=100,timeStep=8,multiplier=200;
     public int xDir,yDir,minCells;
     public Rigidbody virus,dummyvirus,whiteCell,cell;
@@ -10,11 +10,13 @@ public class HUDHandler : MonoBehaviour
     public Texture winScreen,loseScreen,pauseScreen,splashScreen,intro1,controlsScreen;
     public Font newFont;
     public AudioSource death,win,corruption;
+    public Material explosionMaterial;
     enum GameState { Splash,Game,Pause,Win,Lose,Intro }
     GameState state=GameState.Splash;
     float startTime,newTime,maxVirus; bool endSound; int introPage;
     public static void PlaySfx(AudioClip clip,float volume=1f){if(!clip)return;if(!sfx){var host=new GameObject("Disease Destroyer SFX");DontDestroyOnLoad(host);sfx=host.AddComponent<AudioSource>();sfx.playOnAwake=false;sfx.spatialBlend=0;sfx.volume=1;}sfx.PlayOneShot(clip,volume);}
-    void Start(){numVirusStart=20;numCellsStart=100;SpawnCells();for(var i=0;i<numVirusStart;i++)Instantiate(virus,new Vector3(Random.Range(minX+100,maxX-100),Random.Range(minY+100,maxY-100),0),virus.rotation);maxVirus=numVirusStart;newTime=Time.time+timeStep;}
+    public static void Explode(Vector3 position,Color color,float scale=1f){var host=new GameObject("Explosion");host.transform.position=new Vector3(position.x,position.y,-5);var particles=host.AddComponent<ParticleSystem>();var main=particles.main;main.duration=.35f;main.loop=false;main.playOnAwake=false;main.simulationSpace=ParticleSystemSimulationSpace.World;main.startLifetime=new ParticleSystem.MinMaxCurve(.3f,.7f);main.startSpeed=new ParticleSystem.MinMaxCurve(35*scale,95*scale);main.startSize=new ParticleSystem.MinMaxCurve(5*scale,13*scale);main.startColor=new ParticleSystem.MinMaxGradient(color,new Color(1,.9f,.45f,1));main.maxParticles=60;var emission=particles.emission;emission.rateOverTime=0;emission.SetBursts(new[]{new ParticleSystem.Burst(0,36)});var shape=particles.shape;shape.shapeType=ParticleSystemShapeType.Sphere;shape.radius=5*scale;var renderer=particles.GetComponent<ParticleSystemRenderer>();renderer.renderMode=ParticleSystemRenderMode.Billboard;if(effectMaterial)renderer.sharedMaterial=effectMaterial;particles.Play();Destroy(host,2);}
+    void Start(){effectMaterial=explosionMaterial;numVirusStart=20;numCellsStart=100;SpawnCells();for(var i=0;i<numVirusStart;i++)Instantiate(virus,new Vector3(Random.Range(minX+100,maxX-100),Random.Range(minY+100,maxY-100),0),virus.rotation);maxVirus=numVirusStart;newTime=Time.time+timeStep;}
     void SpawnCells(){var side=Mathf.RoundToInt(Mathf.Sqrt(numCellsStart));for(var i=0;i<side;i++)for(var j=0;j<side;j++){var rb=Instantiate(cell,new Vector3(i/(float)side*1000-500,j/(float)side*1000-500,0),cell.rotation);rb.constraints|=RigidbodyConstraints.FreezeRotation;rb.linearVelocity=new Vector3(Random.Range(-1f,1f)*1000,Random.Range(-1f,1f)*1000,0);}}
     void Update(){var cells=GameObject.FindGameObjectsWithTag("Respawn");var viruses=GameObject.FindGameObjectsWithTag("Finish");if(Input.GetKeyDown(KeyCode.P)){if(state==GameState.Game)state=GameState.Pause;else if(state==GameState.Pause)state=GameState.Game;}if(viruses.Length==0)state=GameState.Win;if(cells.Length<=minCells)state=GameState.Lose;
         if(state==GameState.Game){Time.timeScale=1;endSound=false;CorruptCell();}else if(state==GameState.Pause)Time.timeScale=0;else if(state==GameState.Splash){Time.timeScale=0;if(Advance()){introPage=0;state=GameState.Intro;}}else if(state==GameState.Intro){Time.timeScale=0;if(Advance()){if(introPage==0)introPage=1;else{state=GameState.Game;startTime=Time.time;}}}else if(state==GameState.Win&&!endSound){if(win)PlaySfx(win.clip,win.volume);endSound=true;}else if(state==GameState.Lose&&!endSound){endSound=true;}}

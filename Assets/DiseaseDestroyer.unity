@@ -657,7 +657,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &541902592
 Transform:
   m_ObjectHideFlags: 0
@@ -1025,9 +1025,9 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.775
+    x: 0.8
     y: 0.7
-    width: 0.209
+    width: 0.16
     height: 0.28
   near clip plane: 0.01
   far clip plane: 100
@@ -1229,6 +1229,7 @@ MonoBehaviour:
   death: {fileID: 860500098}
   win: {fileID: 860500097}
   corruption: {fileID: 860500099}
+  explosionMaterial: {fileID: 2100000, guid: 6106b7fc18da50948b876e4550042e3d, type: 2}
 --- !u!82 &860500097
 AudioSource:
   m_ObjectHideFlags: 0

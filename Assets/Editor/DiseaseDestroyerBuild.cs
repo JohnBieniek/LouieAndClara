@@ -23,6 +23,14 @@ public static class DiseaseDestroyerBuild
         }
         var scene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
         var hud = UnityEngine.Object.FindFirstObjectByType<HUDHandler>();
+        const string explosionMaterialPath = "Assets/Disease Destroyer Assets/Materials/ExplosionParticle.mat";
+        var explosionMaterial = AssetDatabase.LoadAssetAtPath<Material>(explosionMaterialPath);
+        if (!explosionMaterial)
+        {
+            var explosionShader = AssetDatabase.LoadAssetAtPath<Shader>("Assets/Disease Destroyer Assets/Materials/ExplosionParticle.shader");
+            if (explosionShader) { explosionMaterial = new Material(explosionShader); AssetDatabase.CreateAsset(explosionMaterial, explosionMaterialPath); }
+        }
+        if (hud && explosionMaterial) hud.explosionMaterial = explosionMaterial;
         var cleanIntro = AssetDatabase.LoadAssetAtPath<Texture>("Assets/Disease Destroyer Assets/Materials/introcard1-clean.png");
         if (hud && cleanIntro) hud.intro1 = cleanIntro;
         var cleanSplash = AssetDatabase.LoadAssetAtPath<Texture>("Assets/Disease Destroyer Assets/Materials/splashScreen-clean.png");
@@ -34,10 +42,13 @@ public static class DiseaseDestroyerBuild
         var miniMap = GameObject.Find("MiniMap")?.GetComponent<Camera>();
         if (miniMap)
         {
+            miniMap.rect = new Rect(.8f, .7f, .16f, .28f);
             miniMap.cullingMask &= ~(1 << 8);
             miniMap.clearFlags = CameraClearFlags.SolidColor;
             miniMap.backgroundColor = new Color(.06f, .06f, .07f, 1f);
         }
+        var obsoleteMapBorder = GameObject.Find("MapBorder");
+        if (obsoleteMapBorder) obsoleteMapBorder.SetActive(false);
         var missing = 0;
         foreach (var root in scene.GetRootGameObjects())
             foreach (var transform in root.GetComponentsInChildren<Transform>(true))
