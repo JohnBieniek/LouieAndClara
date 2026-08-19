@@ -51,6 +51,20 @@ public static class DiseaseDestroyerBuild
             miniMap.cullingMask &= ~(1 << 8);
             miniMap.clearFlags = CameraClearFlags.SolidColor;
             miniMap.backgroundColor = new Color(.06f, .06f, .07f, 1f);
+            var backplateObject = GameObject.Find("MiniMap Backplate") ?? new GameObject("MiniMap Backplate");
+            backplateObject.transform.SetParent(miniMap.transform.parent, false);
+            var backplate = backplateObject.GetComponent<Camera>();
+            if (!backplate) backplate = backplateObject.AddComponent<Camera>();
+            const float backplatePaddingX = .012f;
+            const float backplatePaddingY = .02f;
+            backplate.rect = new Rect(miniMap.rect.x-backplatePaddingX, miniMap.rect.y-backplatePaddingY,
+                miniMap.rect.width+backplatePaddingX*2, miniMap.rect.height+backplatePaddingY*2);
+            backplate.depth = miniMap.depth - .1f;
+            backplate.cullingMask = 0;
+            backplate.clearFlags = CameraClearFlags.SolidColor;
+            backplate.backgroundColor = miniMap.backgroundColor;
+            backplate.allowHDR = false;
+            backplate.allowMSAA = false;
         }
         var mapBorder = scene.GetRootGameObjects()
             .SelectMany(root => root.GetComponentsInChildren<Transform>(true))
