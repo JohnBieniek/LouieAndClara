@@ -1219,8 +1219,8 @@ MonoBehaviour:
   dummyClone: {fileID: 0}
   whiteCellClone: {fileID: 400002, guid: 4e389d492dcafe640838bd177d1c8251, type: 3}
   cellClone: {fileID: 400000, guid: e684dfc86572c5b4b8238870c514c78c, type: 3}
-  winScreen: {fileID: 2800000, guid: 3b77191b2f59a8d419d62f0c91dfd813, type: 3}
-  loseScreen: {fileID: 2800000, guid: 6ef73c7c038a64249bdafb4dceeba822, type: 3}
+  winScreen: {fileID: 2800000, guid: 2df2b8ab4811e364cbb62a4e98406b1a, type: 3}
+  loseScreen: {fileID: 2800000, guid: a5f404aeb784a54459189c8a67a4a46e, type: 3}
   pauseScreen: {fileID: 2800000, guid: e3ed9659b1fa5a04f90b9e04b6acf8cd, type: 3}
   splashScreen: {fileID: 2800000, guid: 23914a8e4fbbd384280d2dc24c889e4d, type: 3}
   intro1: {fileID: 2800000, guid: 46e84cec3ed59504f990b53e439f07bd, type: 3}

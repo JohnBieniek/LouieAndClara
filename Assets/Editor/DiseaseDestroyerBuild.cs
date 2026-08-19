@@ -37,6 +37,10 @@ public static class DiseaseDestroyerBuild
         if (hud && cleanSplash) hud.splashScreen = cleanSplash;
         var controls = AssetDatabase.LoadAssetAtPath<Texture>("Assets/Disease Destroyer Assets/Materials/controls-clean.png");
         if (hud && controls) hud.controlsScreen = controls;
+        var cleanWin = AssetDatabase.LoadAssetAtPath<Texture>("Assets/Disease Destroyer Assets/Materials/winScreen-clean.png");
+        if (hud && cleanWin) hud.winScreen = cleanWin;
+        var cleanLose = AssetDatabase.LoadAssetAtPath<Texture>("Assets/Disease Destroyer Assets/Materials/loseScreen-clean.png");
+        if (hud && cleanLose) hud.loseScreen = cleanLose;
         var background = GameObject.Find("Background");
         if (background) background.layer = 8;
         var miniMap = GameObject.Find("MiniMap")?.GetComponent<Camera>();
