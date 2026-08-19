@@ -49,7 +49,7 @@ public static class DiseaseDestroyerBuild
         if (miniMap)
         {
             miniMap.rect = new Rect(.808f, .71f, .145f, .26f);
-            miniMap.orthographicSize = 550f;
+            miniMap.orthographicSize = 470f;
             miniMap.cullingMask &= ~(1 << 8);
             miniMap.clearFlags = CameraClearFlags.Depth;
             var mainCamera = Camera.main;
