@@ -3,8 +3,8 @@ using UnityEngine;
 [RequireComponent(typeof(Camera))]
 public class MiniMapProjection : MonoBehaviour
 {
-    public float horizontalExtent = 470f;
-    public float verticalExtent = 470f;
+    public float horizontalExtent = 520f;
+    public float verticalExtent = 520f;
     Camera mapCamera;
 
     void Awake() { mapCamera = GetComponent<Camera>(); Apply(); }

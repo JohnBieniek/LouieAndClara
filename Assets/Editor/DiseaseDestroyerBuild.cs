@@ -18,6 +18,22 @@ public static class DiseaseDestroyerBuild
         foreach (var path in prefabs.Where(path => path.StartsWith("Assets/Disease Destroyer Assets/Prefabs/")))
         {
             var root = PrefabUtility.LoadPrefabContents(path);
+            if (path.EndsWith("/Cell.prefab"))
+            {
+                var capsule = root.GetComponent<CapsuleCollider>();
+                if (capsule) UnityEngine.Object.DestroyImmediate(capsule);
+                var sphere = root.GetComponent<SphereCollider>();
+                if (!sphere) sphere = root.AddComponent<SphereCollider>();
+                sphere.radius = .5f;
+                var body = root.GetComponent<Rigidbody>();
+                if (body)
+                {
+                    body.collisionDetectionMode = CollisionDetectionMode.Discrete;
+                    body.interpolation = RigidbodyInterpolation.Interpolate;
+                    body.solverIterations = 8;
+                    body.solverVelocityIterations = 2;
+                }
+            }
             PrefabUtility.SaveAsPrefabAsset(root, path);
             PrefabUtility.UnloadPrefabContents(root);
         }
@@ -52,8 +68,8 @@ public static class DiseaseDestroyerBuild
             miniMap.orthographicSize = 550f;
             var mapProjection = miniMap.GetComponent<MiniMapProjection>();
             if (!mapProjection) mapProjection = miniMap.gameObject.AddComponent<MiniMapProjection>();
-            mapProjection.horizontalExtent = 470f;
-            mapProjection.verticalExtent = 470f;
+            mapProjection.horizontalExtent = 520f;
+            mapProjection.verticalExtent = 520f;
             miniMap.cullingMask &= ~(1 << 8);
             miniMap.clearFlags = CameraClearFlags.Depth;
             var mainCamera = Camera.main;
