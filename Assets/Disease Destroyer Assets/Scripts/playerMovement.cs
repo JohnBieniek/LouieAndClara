@@ -19,10 +19,10 @@ public class playerMovement : MonoBehaviour
     {
         if (Time.timeScale != 0 && Input.GetButtonDown("Fire1"))
         {
-            if (!curBullet) { AudioSource.PlayClipAtPoint(shoot, transform.position); var spawn=GameObject.Find("BulletSpawn").transform; curBullet=Instantiate(bullet,spawn.position,Quaternion.identity); curBullet.linearVelocity=(spawn.position-transform.position).normalized*bulletSpeed; }
+            if (!curBullet) { HUDHandler.PlaySfx(shoot); var spawn=GameObject.Find("BulletSpawn").transform; curBullet=Instantiate(bullet,spawn.position,Quaternion.identity); curBullet.linearVelocity=(spawn.position-transform.position).normalized*bulletSpeed; }
             else curBullet.GetComponent<bulletControl>().kill();
         }
-        if (Time.timeScale != 0 && (Input.GetButtonDown("Fire2") || Input.GetKeyDown(KeyCode.Space)) && burstTime <= 0) { AudioSource.PlayClipAtPoint(push, transform.position); burstTime=burstDuration; var light=GameObject.Find("PushLight"); if(light) light.GetComponent<pushLightScript>()?.push(); StartCoroutine(BurstAttack()); }
+        if (Time.timeScale != 0 && (Input.GetButtonDown("Fire2") || Input.GetKeyDown(KeyCode.Space)) && burstTime <= 0) { HUDHandler.PlaySfx(push); burstTime=burstDuration; var light=GameObject.Find("PushLight"); if(light) light.GetComponent<pushLightScript>()?.push(); StartCoroutine(BurstAttack()); }
         else burstTime -= Time.deltaTime;
     }
     void FixedUpdate()

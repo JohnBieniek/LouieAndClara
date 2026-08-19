@@ -1224,6 +1224,7 @@ MonoBehaviour:
   pauseScreen: {fileID: 2800000, guid: e3ed9659b1fa5a04f90b9e04b6acf8cd, type: 3}
   splashScreen: {fileID: 2800000, guid: 23914a8e4fbbd384280d2dc24c889e4d, type: 3}
   intro1: {fileID: 2800000, guid: 46e84cec3ed59504f990b53e439f07bd, type: 3}
+  controlsScreen: {fileID: 2800000, guid: e128d2a731b75ce45bc6ede3c415de0f, type: 3}
   newFont: {fileID: 12800000, guid: 4d550182ecde587488352039ffcdf1d6, type: 3}
   death: {fileID: 860500098}
   win: {fileID: 860500097}

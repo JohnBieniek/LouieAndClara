@@ -12,5 +12,5 @@ public class virusMovement : MonoBehaviour
     void Aim(Vector3 p,float min,float max){xDir=p.x<transform.position.x?Random.Range(-2f,0):Random.Range(0,2f);yDir=p.y<transform.position.y?Random.Range(-2f,0):Random.Range(0,2f);tChange=Time.time+Random.Range(min,max);}
     void Bounce(){var p=body.position;var v=body.linearVelocity;if(p.x>491){p.x=491;v.x=-Mathf.Abs(v.x);}if(p.x<-491){p.x=-491;v.x=Mathf.Abs(v.x);}if(p.y>491){p.y=491;v.y=-Mathf.Abs(v.y);}if(p.y<-491){p.y=-491;v.y=Mathf.Abs(v.y);}body.position=p;body.linearVelocity=v;}
     void OnCollisionEnter(Collision c){if(c.gameObject.name.Contains("bullet"))kill();if(c.gameObject.name=="Character")c.gameObject.GetComponent<playerMovement>()?.startSlow();if(c.gameObject.CompareTag("Respawn")&&Time.time>startTime+2){attached=true;food=c.rigidbody;foodOffset=food.position-body.position;body.linearVelocity=food.linearVelocity;tChange=Time.time+2;}}
-    public void kill(){if(splat)AudioSource.PlayClipAtPoint(splat,transform.position);if(emitter){emitter.transform.SetParent(null);emitter.Play();Destroy(emitter.gameObject,2);}Destroy(gameObject);}
+    public void kill(){HUDHandler.PlaySfx(splat);if(emitter){emitter.transform.SetParent(null);emitter.Play();Destroy(emitter.gameObject,2);}Destroy(gameObject);}
 }

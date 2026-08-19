@@ -10,8 +10,8 @@ public class cellMovement : MonoBehaviour
     void Update()=>Bounce();
     void OnCollisionEnter(Collision c){if(c.gameObject.name.Contains("Virus")&&Time.time>startTime+2)kill(false);}
     void Bounce(){var p=body.position;var v=body.linearVelocity;if(p.x>480){p.x=480;v.x=-Mathf.Abs(v.x);}if(p.x<-480){p.x=-480;v.x=Mathf.Abs(v.x);}if(p.y>480){p.y=480;v.y=-Mathf.Abs(v.y);}if(p.y<-480){p.y=-480;v.y=Mathf.Abs(v.y);}body.position=p;body.linearVelocity=v;}
-    public void corrupt(){if(visual&&tex4)visual.material.mainTexture=tex4;Emit(3);if(splat)AudioSource.PlayClipAtPoint(splat,transform.position);SpawnVirus();Destroy(gameObject);}
-    public void kill(bool spawn){health--;if(visual){if(health==2&&tex2)visual.material.mainTexture=tex2;if(health==1&&tex3)visual.material.mainTexture=tex3;}if(health<=0){Emit(3);if(splat)AudioSource.PlayClipAtPoint(splat,transform.position);if(spawn)SpawnVirus();Destroy(gameObject);}startTime=Time.time;}
+    public void corrupt(){if(visual&&tex4)visual.material.mainTexture=tex4;Emit(3);HUDHandler.PlaySfx(splat);SpawnVirus();Destroy(gameObject);}
+    public void kill(bool spawn){health--;if(visual){if(health==2&&tex2)visual.material.mainTexture=tex2;if(health==1&&tex3)visual.material.mainTexture=tex3;}if(health<=0){Emit(3);HUDHandler.PlaySfx(splat);if(spawn)SpawnVirus();Destroy(gameObject);}startTime=Time.time;}
     void SpawnVirus(){if(virus)Instantiate(virus,new Vector3(body.position.x,body.position.y,0),virus.rotation);}
     void Emit(float life){if(!emitter)return;emitter.transform.SetParent(null);emitter.Play();Destroy(emitter.gameObject,life);}
 }
