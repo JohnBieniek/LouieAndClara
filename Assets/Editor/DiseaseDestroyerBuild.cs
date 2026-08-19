@@ -22,6 +22,11 @@ public static class DiseaseDestroyerBuild
             PrefabUtility.UnloadPrefabContents(root);
         }
         var scene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
+        var hud = UnityEngine.Object.FindFirstObjectByType<HUDHandler>();
+        var cleanIntro = AssetDatabase.LoadAssetAtPath<Texture>("Assets/Disease Destroyer Assets/Materials/introcard1-clean.png");
+        if (hud && cleanIntro) hud.intro1 = cleanIntro;
+        var cleanSplash = AssetDatabase.LoadAssetAtPath<Texture>("Assets/Disease Destroyer Assets/Materials/splashScreen-clean.png");
+        if (hud && cleanSplash) hud.splashScreen = cleanSplash;
         var missing = 0;
         foreach (var root in scene.GetRootGameObjects())
             foreach (var transform in root.GetComponentsInChildren<Transform>(true))
@@ -37,7 +42,7 @@ public static class DiseaseDestroyerBuild
         PlayerSettings.productName = "Disease Destroyer";
         PlayerSettings.companyName = "Bean";
         PlayerSettings.defaultScreenWidth = 960;
-        PlayerSettings.defaultScreenHeight = 600;
+        PlayerSettings.defaultScreenHeight = 540;
         PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Disabled;
         PlayerSettings.WebGL.decompressionFallback = true;
         AssetDatabase.SaveAssets();
@@ -64,6 +69,25 @@ public static class DiseaseDestroyerBuild
         });
         if (report.summary.result != BuildResult.Succeeded)
             throw new InvalidOperationException($"WebGL build failed: {report.summary.result}, {report.summary.totalErrors} errors");
+        MakeResponsive(output);
         Debug.Log($"Disease Destroyer WebGL build completed: {output}");
+    }
+
+    static void MakeResponsive(string output)
+    {
+        var indexPath = Path.Combine(output, "index.html");
+        var index = File.ReadAllText(indexPath)
+            .Replace("width=960 height=600", "width=960 height=540")
+            .Replace("canvas.style.width = \"960px\";", "canvas.style.width = \"100%\";")
+            .Replace("canvas.style.height = \"600px\";", "canvas.style.height = \"100%\";");
+        File.WriteAllText(indexPath, index);
+
+        var cssPath = Path.Combine(output, "TemplateData", "style.css");
+        var css = File.ReadAllText(cssPath);
+        css += "\nhtml, body { width: 100%; height: 100%; overflow: hidden; background: #000; }\n" +
+               "#unity-container.unity-desktop { inset: 0; width: 100%; height: 100%; transform: none; }\n" +
+               "#unity-canvas { display: block; width: 100% !important; height: 100% !important; }\n" +
+               "#unity-footer { display: none; }\n";
+        File.WriteAllText(cssPath, css);
     }
 }

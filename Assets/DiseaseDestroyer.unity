@@ -1222,8 +1222,8 @@ MonoBehaviour:
   winScreen: {fileID: 2800000, guid: 3b77191b2f59a8d419d62f0c91dfd813, type: 3}
   loseScreen: {fileID: 2800000, guid: 6ef73c7c038a64249bdafb4dceeba822, type: 3}
   pauseScreen: {fileID: 2800000, guid: e3ed9659b1fa5a04f90b9e04b6acf8cd, type: 3}
-  splashScreen: {fileID: 2800000, guid: 5b490a65231614040acda44c8a8d993d, type: 3}
-  intro1: {fileID: 2800000, guid: e3ed9659b1fa5a04f90b9e04b6acf8cd, type: 3}
+  splashScreen: {fileID: 2800000, guid: 23914a8e4fbbd384280d2dc24c889e4d, type: 3}
+  intro1: {fileID: 2800000, guid: 46e84cec3ed59504f990b53e439f07bd, type: 3}
   newFont: {fileID: 12800000, guid: 4d550182ecde587488352039ffcdf1d6, type: 3}
   death: {fileID: 860500098}
   win: {fileID: 860500097}
