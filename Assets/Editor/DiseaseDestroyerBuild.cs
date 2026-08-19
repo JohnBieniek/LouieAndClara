@@ -38,6 +38,25 @@ public static class DiseaseDestroyerBuild
             PrefabUtility.UnloadPrefabContents(root);
         }
         var scene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
+        var character = GameObject.Find("Character");
+        if (character)
+        {
+            var playerVisual = character.transform.Find("Player");
+            if (playerVisual)
+            {
+                var capsule = playerVisual.GetComponent<CapsuleCollider>();
+                if (capsule) UnityEngine.Object.DestroyImmediate(capsule);
+                var sphere = playerVisual.GetComponent<SphereCollider>();
+                if (!sphere) sphere = playerVisual.gameObject.AddComponent<SphereCollider>();
+                sphere.radius = .5f;
+            }
+            var playerBody = character.GetComponent<Rigidbody>();
+            if (playerBody)
+            {
+                playerBody.interpolation = RigidbodyInterpolation.Interpolate;
+                playerBody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+            }
+        }
         var hud = UnityEngine.Object.FindFirstObjectByType<HUDHandler>();
         const string explosionMaterialPath = "Assets/Disease Destroyer Assets/Materials/ExplosionParticle.mat";
         var explosionMaterial = AssetDatabase.LoadAssetAtPath<Material>(explosionMaterialPath);
