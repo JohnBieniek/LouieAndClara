@@ -52,7 +52,7 @@ public static class DiseaseDestroyerBuild
             miniMap.orthographicSize = 550f;
             var mapProjection = miniMap.GetComponent<MiniMapProjection>();
             if (!mapProjection) mapProjection = miniMap.gameObject.AddComponent<MiniMapProjection>();
-            mapProjection.horizontalExtent = 550f;
+            mapProjection.horizontalExtent = 470f;
             mapProjection.verticalExtent = 470f;
             miniMap.cullingMask &= ~(1 << 8);
             miniMap.clearFlags = CameraClearFlags.Depth;

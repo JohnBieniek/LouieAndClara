@@ -850,7 +850,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d19cd0c032b383640a547e44e0b3ce03, type: 3}
   m_Name:
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier:
   duration: 0.5
 --- !u!1 &572902886
 GameObject:
@@ -1078,7 +1078,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6e53ec1b7ecd5246ab5eb9bdcda37aa, type: 3}
   m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::MiniMapProjection
-  horizontalExtent: 550
+  horizontalExtent: 470
   verticalExtent: 470
 --- !u!1 &744936463
 GameObject:
@@ -1108,7 +1108,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -2.2440796, z: 1}
-  m_LocalScale: {x: 1100, y: 940, z: 1}
+  m_LocalScale: {x: 940, y: 940, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 901763317}
