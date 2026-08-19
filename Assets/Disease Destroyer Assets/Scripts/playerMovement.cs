@@ -11,8 +11,8 @@ public class playerMovement : MonoBehaviour
     public Transform clone;
     public AudioClip shoot, push;
     float burstTime, startTime;
-    Rigidbody body; Collider playerCollider;
-    void Awake() { body=GetComponent<Rigidbody>();playerCollider=GetComponentInChildren<Collider>(); }
+    Rigidbody body;
+    void Awake() => body = GetComponent<Rigidbody>();
     void Start() => startTime = Time.time;
     public void restart() { body.position=Vector3.zero; body.linearVelocity=Vector3.zero; startTime=Time.time; }
     void Update()
@@ -30,9 +30,8 @@ public class playerMovement : MonoBehaviour
         if (Time.time > startTime+1) { FacePointer(); if(body.linearVelocity.magnitude<350){body.linearVelocity += new Vector3(Input.GetAxis("Horizontal")*(speed-accelSlowFactor),Input.GetAxis("Vertical")*(speed-accelSlowFactor),0);} }
         else {body.position=Vector3.zero;body.linearVelocity=Vector3.zero;}
         var p=body.position; if(p.x>490){p.x=490;body.linearVelocity=new Vector3(-Mathf.Abs(body.linearVelocity.x*.5f),body.linearVelocity.y,0);} if(p.x<-490){p.x=-490;body.linearVelocity=new Vector3(Mathf.Abs(body.linearVelocity.x*.5f),body.linearVelocity.y,0);} if(p.y>490){p.y=490;body.linearVelocity=new Vector3(body.linearVelocity.x,-Mathf.Abs(body.linearVelocity.y*.5f),0);} if(p.y<-490){p.y=-490;body.linearVelocity=new Vector3(body.linearVelocity.x,Mathf.Abs(body.linearVelocity.y*.5f),0);} body.position=p;
-        body.linearVelocity*=body.linearVelocity.magnitude>=450?.95f*speedSlowFactor:.99f*speedSlowFactor;ResolveOverlaps();EndSlow();
+        body.linearVelocity*=body.linearVelocity.magnitude>=450?.95f*speedSlowFactor:.99f*speedSlowFactor; EndSlow();
     }
-    void ResolveOverlaps(){if(!playerCollider)return;foreach(var other in Physics.OverlapSphere(body.position,50f,~0,QueryTriggerInteraction.Ignore)){if(other==playerCollider||other.attachedRigidbody==body||(!other.CompareTag("Respawn")&&!other.CompareTag("Finish")))continue;if(Physics.ComputePenetration(playerCollider,playerCollider.transform.position,playerCollider.transform.rotation,other,other.transform.position,other.transform.rotation,out var direction,out var distance))body.position+=direction*(distance+.1f);}var p=body.position;p.z=0;body.position=p;}
     public void addVel(Vector3 v)=>body.linearVelocity=new Vector3(v.x,v.y,0);
     public void startSlow(){if(!slow){slow=true;slowTime=Time.time;speedSlowFactor=1;accelSlowFactor=3;}}
     void EndSlow(){if(slow&&Time.time>slowTime+slowDuration){slow=false;slowTime=0;speedSlowFactor=1;accelSlowFactor=0;}}
