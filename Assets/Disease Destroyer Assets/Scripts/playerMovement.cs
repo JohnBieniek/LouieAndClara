@@ -19,7 +19,17 @@ public class playerMovement : MonoBehaviour
     {
         if (Time.timeScale != 0 && Input.GetButtonDown("Fire1"))
         {
-            if (!curBullet) { HUDHandler.PlaySfx(shoot); var spawn=GameObject.Find("BulletSpawn").transform; curBullet=Instantiate(bullet,spawn.position,Quaternion.identity); curBullet.linearVelocity=(spawn.position-transform.position).normalized*bulletSpeed; }
+            if (!curBullet)
+            {
+                HUDHandler.PlaySfx(shoot);
+                var spawn=GameObject.Find("BulletSpawn").transform;
+                curBullet=Instantiate(bullet,spawn.position,Quaternion.identity);
+                var bulletColliders=curBullet.GetComponentsInChildren<Collider>();
+                foreach(var bulletCollider in bulletColliders)
+                    Physics.IgnoreCollision(playerCollider,bulletCollider,true);
+                StartCoroutine(RestoreBulletCollision(bulletColliders));
+                curBullet.linearVelocity=(spawn.position-transform.position).normalized*bulletSpeed;
+            }
             else curBullet.GetComponent<bulletControl>().kill();
         }
         if (Time.timeScale != 0 && (Input.GetButtonDown("Fire2") || Input.GetKeyDown(KeyCode.Space)) && burstTime <= 0) { HUDHandler.PlaySfx(push); burstTime=burstDuration; var light=GameObject.Find("PushLight"); if(light) light.GetComponent<pushLightScript>()?.push(); StartCoroutine(BurstAttack()); }
@@ -33,6 +43,7 @@ public class playerMovement : MonoBehaviour
         body.linearVelocity*=body.linearVelocity.magnitude>=450?.95f*speedSlowFactor:.99f*speedSlowFactor;ResolveOverlaps();EndSlow();
     }
     void ResolveOverlaps(){if(!playerCollider)return;foreach(var other in Physics.OverlapSphere(body.position,50f,~0,QueryTriggerInteraction.Ignore)){if(other==playerCollider||other.attachedRigidbody==body||(!other.CompareTag("Respawn")&&!other.CompareTag("Finish")))continue;if(Physics.ComputePenetration(playerCollider,playerCollider.transform.position,playerCollider.transform.rotation,other,other.transform.position,other.transform.rotation,out var direction,out var distance))body.position+=direction*(distance+.1f);}var p=body.position;p.z=0;body.position=p;}
+    IEnumerator RestoreBulletCollision(Collider[] bulletColliders){yield return new WaitForSeconds(.25f);foreach(var bulletCollider in bulletColliders)if(bulletCollider)Physics.IgnoreCollision(playerCollider,bulletCollider,false);}
     public void addVel(Vector3 v)=>body.linearVelocity=new Vector3(v.x,v.y,0);
     public void startSlow(){if(!slow){slow=true;slowTime=Time.time;speedSlowFactor=1;accelSlowFactor=3;}}
     void EndSlow(){if(slow&&Time.time>slowTime+slowDuration){slow=false;slowTime=0;speedSlowFactor=1;accelSlowFactor=0;}}
