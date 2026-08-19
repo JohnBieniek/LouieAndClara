@@ -41,7 +41,11 @@ public class playerMovement : MonoBehaviour
             if(other.attachedRigidbody==body)continue;
             if(!other.GetComponentInParent<cellMovement>()&&!other.GetComponentInParent<whiteCellMovement>())continue;
             if(Physics.ComputePenetration(playerCollider,playerCollider.transform.position,playerCollider.transform.rotation,other,other.transform.position,other.transform.rotation,out var direction,out var distance))
-                body.position+=direction*(distance+.1f);
+            {
+                var correction=direction*(distance+.1f);
+                if(Time.time<=startTime+1&&other.attachedRigidbody)other.attachedRigidbody.position-=correction;
+                else body.position+=correction;
+            }
         }
         var position=body.position;position.z=0;body.position=position;
     }
