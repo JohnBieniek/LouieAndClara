@@ -27,6 +27,15 @@ public static class DiseaseDestroyerBuild
         if (hud && cleanIntro) hud.intro1 = cleanIntro;
         var cleanSplash = AssetDatabase.LoadAssetAtPath<Texture>("Assets/Disease Destroyer Assets/Materials/splashScreen-clean.png");
         if (hud && cleanSplash) hud.splashScreen = cleanSplash;
+        var background = GameObject.Find("Background");
+        if (background) background.layer = 8;
+        var miniMap = GameObject.Find("MiniMap")?.GetComponent<Camera>();
+        if (miniMap)
+        {
+            miniMap.cullingMask &= ~(1 << 8);
+            miniMap.clearFlags = CameraClearFlags.SolidColor;
+            miniMap.backgroundColor = new Color(.06f, .06f, .07f, 1f);
+        }
         var missing = 0;
         foreach (var root in scene.GetRootGameObjects())
             foreach (var transform in root.GetComponentsInChildren<Transform>(true))
