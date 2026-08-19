@@ -36,13 +36,15 @@ public static class DiseaseDestroyerBuild
         var cleanSplash = AssetDatabase.LoadAssetAtPath<Texture>("Assets/Disease Destroyer Assets/Materials/splashScreen-clean.png");
         if (hud && cleanSplash) hud.splashScreen = cleanSplash;
         var controls = AssetDatabase.LoadAssetAtPath<Texture>("Assets/Disease Destroyer Assets/Materials/controls-clean.png");
-        if (hud && controls) hud.controlsScreen = controls;
+        if (hud && controls) { hud.controlsScreen = controls; hud.pauseScreen = controls; }
         var cleanWin = AssetDatabase.LoadAssetAtPath<Texture>("Assets/Disease Destroyer Assets/Materials/winScreen-clean.png");
         if (hud && cleanWin) hud.winScreen = cleanWin;
         var cleanLose = AssetDatabase.LoadAssetAtPath<Texture>("Assets/Disease Destroyer Assets/Materials/loseScreen-clean.png");
         if (hud && cleanLose) hud.loseScreen = cleanLose;
-        var background = GameObject.Find("Background");
-        if (background) background.layer = 8;
+        var backgroundMaterial = AssetDatabase.LoadAssetAtPath<Material>("Assets/Disease Destroyer Assets/Materials/Materials/background.mat");
+        if (backgroundMaterial)
+            foreach (var renderer in scene.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<Renderer>(true)))
+                if (renderer.sharedMaterials.Contains(backgroundMaterial)) renderer.gameObject.layer = 8;
         var miniMap = GameObject.Find("MiniMap")?.GetComponent<Camera>();
         if (miniMap)
         {
@@ -51,21 +53,11 @@ public static class DiseaseDestroyerBuild
             miniMap.cullingMask &= ~(1 << 8);
             miniMap.clearFlags = CameraClearFlags.SolidColor;
             miniMap.backgroundColor = new Color(.06f, .06f, .07f, 1f);
-            var backplateObject = GameObject.Find("MiniMap Backplate") ?? new GameObject("MiniMap Backplate");
-            backplateObject.transform.SetParent(miniMap.transform.parent, false);
-            var backplate = backplateObject.GetComponent<Camera>();
-            if (!backplate) backplate = backplateObject.AddComponent<Camera>();
-            const float backplatePaddingX = .012f;
-            const float backplatePaddingY = .02f;
-            backplate.rect = new Rect(miniMap.rect.x-backplatePaddingX, miniMap.rect.y-backplatePaddingY,
-                miniMap.rect.width+backplatePaddingX*2, miniMap.rect.height+backplatePaddingY*2);
-            backplate.depth = miniMap.depth - .1f;
-            backplate.cullingMask = 0;
-            backplate.clearFlags = CameraClearFlags.SolidColor;
-            backplate.backgroundColor = miniMap.backgroundColor;
-            backplate.allowHDR = false;
-            backplate.allowMSAA = false;
         }
+        var backplateObject = scene.GetRootGameObjects()
+            .SelectMany(root => root.GetComponentsInChildren<Transform>(true))
+            .FirstOrDefault(item => item.name == "MiniMap Backplate");
+        if (backplateObject) UnityEngine.Object.DestroyImmediate(backplateObject.gameObject);
         var mapBorder = scene.GetRootGameObjects()
             .SelectMany(root => root.GetComponentsInChildren<Transform>(true))
             .FirstOrDefault(item => item.name == "MapBorder");
