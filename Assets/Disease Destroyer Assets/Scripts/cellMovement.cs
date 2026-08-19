@@ -7,7 +7,7 @@ public class cellMovement : MonoBehaviour
     int health=3; float startTime; Rigidbody body; Renderer visual;
     void Awake(){body=GetComponent<Rigidbody>();visual=GetComponent<Renderer>();emitter=GetComponentInChildren<ParticleSystem>();}
     void Start(){startTime=Time.time;if(emitter)emitter.Stop();}
-    void Update()=>Bounce();
+    void Update(){if(Time.timeScale>0)Bounce();}
     void OnCollisionEnter(Collision c){if(c.gameObject.name.Contains("Virus")&&Time.time>startTime+2)kill(false);}
     void Bounce(){var p=body.position;var v=body.linearVelocity;if(p.x>480){p.x=480;v.x=-Mathf.Abs(v.x);}if(p.x<-480){p.x=-480;v.x=Mathf.Abs(v.x);}if(p.y>480){p.y=480;v.y=-Mathf.Abs(v.y);}if(p.y<-480){p.y=-480;v.y=Mathf.Abs(v.y);}body.position=p;body.linearVelocity=v;}
     public void corrupt(){if(visual&&tex4)visual.material.mainTexture=tex4;Emit(3);HUDHandler.Explode(transform.position,new Color(.85f,.2f,.05f),1.1f);HUDHandler.PlaySfx(splat);SpawnVirus();Destroy(gameObject);}
