@@ -20,7 +20,8 @@ public class virusMovement : MonoBehaviour
             if(other.attachedRigidbody==body)continue;
             var isPlayer=other.GetComponentInParent<playerMovement>();
             var isCell=other.GetComponentInParent<cellMovement>()||other.GetComponentInParent<whiteCellMovement>();
-            if(!isPlayer&&!isCell)continue;
+            var isVirus=other.GetComponentInParent<virusMovement>();
+            if(!isPlayer&&!isCell&&!isVirus)continue;
             if(Physics.ComputePenetration(virusCollider,virusCollider.transform.position,virusCollider.transform.rotation,other,other.transform.position,other.transform.rotation,out var direction,out var distance))
                 body.position+=direction*(distance+.1f);
         }
