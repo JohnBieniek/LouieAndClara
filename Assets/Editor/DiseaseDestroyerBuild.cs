@@ -59,9 +59,9 @@ public static class DiseaseDestroyerBuild
             tintObject.name = "MiniMap Tint";
             tintObject.layer = 9;
             tintObject.transform.SetParent(miniMap.transform.parent, false);
-            tintObject.transform.localPosition = new Vector3(miniMap.transform.localPosition.x, miniMap.transform.localPosition.y, 1f);
+            tintObject.transform.localPosition = new Vector3(miniMap.transform.localPosition.x, miniMap.transform.localPosition.y+5.5f, 1f);
             var mapAspect = miniMap.rect.width*PlayerSettings.defaultScreenWidth/(miniMap.rect.height*PlayerSettings.defaultScreenHeight);
-            tintObject.transform.localScale = new Vector3(miniMap.orthographicSize*2f*mapAspect, miniMap.orthographicSize*2f, 1f);
+            tintObject.transform.localScale = new Vector3(miniMap.orthographicSize*2f*mapAspect, miniMap.orthographicSize*2f*.915f, 1f);
             var tintCollider = tintObject.GetComponent<Collider>();
             if (tintCollider) UnityEngine.Object.DestroyImmediate(tintCollider);
             const string tintMaterialPath = "Assets/Disease Destroyer Assets/Materials/MiniMapTint.mat";
@@ -73,7 +73,7 @@ public static class DiseaseDestroyerBuild
                 AssetDatabase.CreateAsset(tintMaterial, tintMaterialPath);
             }
             else if (tintShader) tintMaterial.shader = tintShader;
-            tintMaterial.color = new Color(1f, 1f, 1f, .5f);
+            tintMaterial.color = new Color(1f, 1f, 1f, .25f);
             tintObject.GetComponent<Renderer>().sharedMaterial = tintMaterial;
         }
         var backplateObject = scene.GetRootGameObjects()
